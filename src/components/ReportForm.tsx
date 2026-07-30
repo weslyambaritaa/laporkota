@@ -15,7 +15,7 @@ import type { Report, ReportCategory, ReportUrgency } from "@/lib/types";
 const LocationPicker = dynamic(() => import("./LocationPicker"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-72 w-full items-center justify-center rounded-lg border border-border text-sm text-muted">
+    <div className="flex h-72 w-full items-center justify-center rounded-[5px] border border-border text-sm text-muted">
       Memuat peta...
     </div>
   ),
@@ -258,7 +258,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Contoh: Lampu jalan mati di depan gedung P"
-          className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+          className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
         />
       </label>
 
@@ -270,7 +270,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
           placeholder="Jelaskan kondisi masalah secara detail..."
-          className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+          className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
         />
       </label>
 
@@ -289,7 +289,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
             width={400}
             height={240}
             unoptimized
-            className="mt-1 h-48 w-full rounded-lg border border-border object-cover"
+            className="mt-1 h-48 w-full rounded-[5px] border border-border object-cover"
           />
         )}
       </div>
@@ -301,7 +301,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
             type="button"
             onClick={handleUseMyLocation}
             disabled={locating}
-            className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/10"
+            className="rounded-[5px] border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/10"
           >
             {locating ? "Mengambil lokasi..." : "📍 Gunakan Lokasi Saya"}
           </button>
@@ -315,11 +315,11 @@ export function ReportForm({ report }: { report?: Report } = {}) {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Alamat (terisi otomatis, bisa diedit)"
-          className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-primary"
+          className="rounded-[5px] border border-border bg-transparent px-3 py-2 text-sm outline-none focus:border-primary"
         />
       </div>
 
-      <div className="rounded-lg border border-dashed border-primary p-4">
+      <div className="rounded-[5px] border border-dashed border-primary p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-sm font-semibold">✨ Klasifikasi Otomatis dengan AI</p>
@@ -331,13 +331,13 @@ export function ReportForm({ report }: { report?: Report } = {}) {
             type="button"
             onClick={handleClassify}
             disabled={classifying}
-            className="shrink-0 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-primary-hover disabled:opacity-60"
+            className="shrink-0 rounded-[5px] bg-primary px-3 py-2 text-xs font-semibold text-white hover:bg-primary-hover disabled:opacity-60"
           >
             {classifying ? "Menganalisis..." : "Klasifikasikan"}
           </button>
         </div>
         {aiReasoning && (
-          <p className="mt-3 rounded-lg bg-primary/10 p-2 text-xs italic text-primary dark:text-primary-light">
+          <p className="mt-3 rounded-[5px] bg-primary/10 p-2 text-xs italic text-primary dark:text-primary-light">
             💡 {aiReasoning}
           </p>
         )}
@@ -349,7 +349,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as ReportCategory)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-card px-3 py-2 outline-none focus:border-primary"
           >
             {CATEGORY_OPTIONS.map(([value, label]) => (
               <option key={value} value={value}>
@@ -364,7 +364,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
           <select
             value={urgency}
             onChange={(e) => setUrgency(e.target.value as ReportUrgency)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-card px-3 py-2 outline-none focus:border-primary"
           >
             {URGENCY_OPTIONS.map(([value, label]) => (
               <option key={value} value={value}>
@@ -378,7 +378,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-2 rounded-lg bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
+        className="mt-2 rounded-[5px] bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
       >
         {submitting
           ? isEdit

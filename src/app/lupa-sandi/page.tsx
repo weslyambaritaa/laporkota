@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
             placeholder="nama@email.com"
           />
         </label>
@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
         <button
           type="submit"
           disabled={loading || onCooldown}
-          className="mt-2 rounded-lg bg-primary px-4 py-2 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
+          className="mt-2 rounded-[5px] bg-primary px-4 py-2 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
         >
           {loading
             ? "Mengirim..."
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
         </button>
 
         {sent && (
-          <p className="rounded-lg bg-green-500/10 px-3 py-2 text-xs text-green-700 dark:text-green-400">
+          <p className="rounded-[5px] bg-green-500/10 px-3 py-2 text-xs text-green-700 dark:text-green-400">
             Jika email tersebut terdaftar, silakan cek kotak masuk (dan folder spam) untuk tautan reset kata sandi.
           </p>
         )}

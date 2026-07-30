@@ -52,14 +52,14 @@ export function ExportButtons({ reports }: { reports: Report[] }) {
       <button
         onClick={exportCsv}
         disabled={reports.length === 0}
-        className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 disabled:opacity-50 dark:hover:bg-white/10"
+        className="rounded-[5px] border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 disabled:opacity-50 dark:hover:bg-white/10"
       >
         ⬇ Export CSV
       </button>
       <button
         onClick={exportPdf}
         disabled={reports.length === 0}
-        className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 disabled:opacity-50 dark:hover:bg-white/10"
+        className="rounded-[5px] border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 disabled:opacity-50 dark:hover:bg-white/10"
       >
         ⬇ Export PDF
       </button>

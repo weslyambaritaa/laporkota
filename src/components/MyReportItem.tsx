@@ -87,7 +87,7 @@ export function MyReportItem({
       </div>
 
       {open && (
-        <div className="mt-2 space-y-2 rounded-lg border border-border bg-card p-3">
+        <div className="mt-2 space-y-2 rounded-[5px] border border-border bg-card p-3">
           {loading && <p className="text-xs text-muted">Memuat riwayat...</p>}
           {!loading && history?.length === 0 && (
             <p className="text-xs text-muted">Belum ada riwayat status.</p>

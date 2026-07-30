@@ -34,14 +34,14 @@ export default async function MyReportsPage() {
         </div>
         <Link
           href="/laporan/baru"
-          className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-hover"
+          className="rounded-[5px] bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-hover"
         >
           + Lapor Baru
         </Link>
       </div>
 
       {list.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-border p-10 text-center text-sm text-muted">
+        <div className="rounded-[5px] border border-dashed border-border p-10 text-center text-sm text-muted">
           Anda belum membuat laporan. Yuk mulai laporkan masalah di sekitar Anda!
         </div>
       ) : (

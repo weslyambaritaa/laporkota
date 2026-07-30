@@ -61,19 +61,19 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
     <div className="flex flex-col gap-6">
       <StatsCharts reports={reports} />
 
-      <div className="rounded-lg border border-border bg-card">
+      <div className="rounded-[5px] border border-border bg-card">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
           <div className="flex flex-wrap gap-2">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari judul, deskripsi, alamat..."
-              className="w-56 rounded-lg border border-border bg-transparent px-3 py-1.5 text-sm outline-none focus:border-primary"
+              className="w-56 rounded-[5px] border border-border bg-transparent px-3 py-1.5 text-sm outline-none focus:border-primary"
             />
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as ReportCategory | "semua")}
-              className="rounded-lg border border-border bg-transparent px-2 py-1.5 text-sm"
+              className="rounded-[5px] border border-border bg-card px-2 py-1.5 text-sm"
             >
               <option value="semua">Semua Kategori</option>
               {CATEGORY_OPTIONS.map(([value, label]) => (
@@ -85,7 +85,7 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as ReportStatus | "semua")}
-              className="rounded-lg border border-border bg-transparent px-2 py-1.5 text-sm"
+              className="rounded-[5px] border border-border bg-card px-2 py-1.5 text-sm"
             >
               <option value="semua">Semua Status</option>
               {STATUS_OPTIONS.map(([value, label]) => (
@@ -137,7 +137,7 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                           handleStatusChange(report.id, e.target.value as ReportStatus)
                         }
                         style={{ color: STATUS_COLORS[report.status] }}
-                        className="rounded-lg border border-border bg-transparent px-2 py-1 text-xs font-semibold"
+                        className="rounded-[5px] border border-border bg-card px-2 py-1 text-xs font-semibold"
                       >
                         {STATUS_OPTIONS.map(([value, label]) => (
                           <option key={value} value={value}>
@@ -157,7 +157,7 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                               alt={report.title}
                               width={160}
                               height={160}
-                              className="h-40 w-40 shrink-0 rounded-lg object-cover"
+                              className="h-40 w-40 shrink-0 rounded-[5px] object-cover"
                             />
                           )}
                           <div className="flex-1 space-y-2 text-sm">
@@ -169,7 +169,7 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                               Koordinat: {report.lat.toFixed(5)}, {report.lng.toFixed(5)}
                             </p>
                             {report.ai_reasoning && (
-                              <p className="rounded-lg bg-primary/10 p-2 text-xs italic text-primary dark:text-primary-light">
+                              <p className="rounded-[5px] bg-primary/10 p-2 text-xs italic text-primary dark:text-primary-light">
                                 💡 Klasifikasi AI: {report.ai_reasoning}
                               </p>
                             )}

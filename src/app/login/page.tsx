@@ -129,7 +129,7 @@ function LoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
             placeholder="nama@email.com"
           />
         </label>
@@ -141,7 +141,7 @@ function LoginForm() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
             placeholder="••••••••"
           />
         </label>
@@ -153,7 +153,7 @@ function LoginForm() {
         </div>
 
         {isLocked && (
-          <p className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-medium text-red-600 dark:text-red-400">
+          <p className="rounded-[5px] bg-red-500/10 px-3 py-2 text-xs font-medium text-red-600 dark:text-red-400">
             Terlalu banyak percobaan gagal. Coba lagi dalam {secondsLeft} detik.
           </p>
         )}
@@ -161,7 +161,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading || isLocked}
-          className="mt-2 rounded-lg bg-primary px-4 py-2 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
+          className="mt-2 rounded-[5px] bg-primary px-4 py-2 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
         >
           {loading ? "Memproses..." : isLocked ? `Tunggu ${secondsLeft}s` : "Masuk"}
         </button>

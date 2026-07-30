@@ -36,7 +36,7 @@ export function StatsCharts({ reports }: { reports: Report[] }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      <div className="rounded-lg border border-border bg-card p-4">
+      <div className="rounded-[5px] border border-border bg-card p-4">
         <h3 className="mb-3 text-sm font-semibold">Laporan per Kategori</h3>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={categoryData}>
@@ -53,7 +53,7 @@ export function StatsCharts({ reports }: { reports: Report[] }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="rounded-lg border border-border bg-card p-4">
+      <div className="rounded-[5px] border border-border bg-card p-4">
         <h3 className="mb-3 text-sm font-semibold">Distribusi Status</h3>
         <ResponsiveContainer width="100%" height={220}>
           <PieChart>

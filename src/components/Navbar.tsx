@@ -75,7 +75,7 @@ export function Navbar() {
     <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-[44px] max-w-6xl items-center justify-between gap-4 px-5">
         <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-white">
+          <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-primary text-white">
             🏙️
           </span>
           <span>LaporKota</span>
@@ -105,13 +105,13 @@ export function Navbar() {
               <>
                 <Link
                   href="/laporan/baru"
-                  className="hidden rounded-lg bg-primary px-4 py-2 text-sm font-normal text-white transition hover:bg-primary-hover active:bg-primary-active sm:block"
+                  className="hidden rounded-[5px] bg-primary px-4 py-2 text-sm font-normal text-white transition hover:bg-primary-hover active:bg-primary-active sm:block"
                 >
                   + Lapor
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-normal transition hover:bg-black/5 dark:hover:bg-white/10"
+                  className="rounded-[5px] border border-border px-4 py-2 text-sm font-normal transition hover:bg-black/5 dark:hover:bg-white/10"
                 >
                   Keluar
                 </button>
@@ -120,13 +120,13 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="rounded-lg px-4 py-2 text-sm font-normal hover:bg-black/5 dark:hover:bg-white/10"
+                  className="rounded-[5px] px-4 py-2 text-sm font-normal hover:bg-black/5 dark:hover:bg-white/10"
                 >
                   Masuk
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-lg bg-primary px-4 py-2 text-sm font-normal text-white transition hover:bg-primary-hover active:bg-primary-active"
+                  className="rounded-[5px] bg-primary px-4 py-2 text-sm font-normal text-white transition hover:bg-primary-hover active:bg-primary-active"
                 >
                   Daftar
                 </Link>
@@ -139,7 +139,7 @@ export function Navbar() {
           <Link
             key={link.href}
             href={link.href}
-            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium ${
+            className={`shrink-0 rounded-[5px] px-3 py-1.5 text-sm font-medium ${
               pathname === link.href ? "text-primary" : ""
             }`}
           >

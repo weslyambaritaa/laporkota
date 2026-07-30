@@ -31,7 +31,7 @@ export default function LocationPicker({
   }, []);
 
   return (
-    <div className="h-72 w-full overflow-hidden rounded-lg border border-border">
+    <div className="h-72 w-full overflow-hidden rounded-[5px] border border-border">
       <MapContainer
         center={[lat, lng]}
         zoom={15}

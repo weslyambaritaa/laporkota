@@ -49,7 +49,7 @@ export function MapExplorer({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as ReportCategory | "semua")}
-            className="rounded-lg border border-border bg-transparent px-2 py-1.5 text-xs"
+            className="rounded-[5px] border border-border bg-card px-2 py-1.5 text-xs"
           >
             <option value="semua">Semua Kategori</option>
             {CATEGORY_OPTIONS.map(([value, label]) => (
@@ -61,7 +61,7 @@ export function MapExplorer({
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as ReportStatus | "semua")}
-            className="rounded-lg border border-border bg-transparent px-2 py-1.5 text-xs"
+            className="rounded-[5px] border border-border bg-card px-2 py-1.5 text-xs"
           >
             <option value="semua">Semua Status</option>
             {STATUS_OPTIONS.map(([value, label]) => (
@@ -90,7 +90,7 @@ export function MapExplorer({
         </div>
       </div>
 
-      <div className="min-h-[300px] flex-1 overflow-hidden rounded-lg border border-border">
+      <div className="min-h-[300px] flex-1 overflow-hidden rounded-[5px] border border-border">
         <ReportMap reports={filtered} />
       </div>
     </div>

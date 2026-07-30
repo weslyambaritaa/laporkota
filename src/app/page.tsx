@@ -43,24 +43,24 @@ export default async function HomePage() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/laporan/baru"
-            className="rounded-lg bg-primary px-6 py-3 font-semibold text-white transition hover:bg-primary-hover"
+            className="rounded-[5px] bg-primary px-6 py-3 font-semibold text-white transition hover:bg-primary-hover"
           >
             📢 Buat Laporan
           </Link>
           <Link
             href="/peta"
-            className="rounded-lg border border-border px-6 py-3 font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
+            className="rounded-[5px] border border-border px-6 py-3 font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
           >
             🗺️ Lihat Peta Laporan
           </Link>
         </div>
 
         <div className="mx-auto mt-12 grid max-w-md grid-cols-2 gap-4">
-          <div className="rounded-[28px] border border-border bg-card p-6">
+          <div className="rounded-[5px] border border-border bg-card p-6">
             <p className="text-3xl font-extrabold text-primary">{total ?? 0}</p>
             <p className="text-sm text-muted">Total Laporan</p>
           </div>
-          <div className="rounded-[28px] border border-border bg-card p-6">
+          <div className="rounded-[5px] border border-border bg-card p-6">
             <p className="text-3xl font-extrabold text-green-500">{selesai ?? 0}</p>
             <p className="text-sm text-muted">Selesai Ditangani</p>
           </div>
@@ -77,7 +77,7 @@ export default async function HomePage() {
               { icon: "📍", title: "Tandai Lokasi", desc: "Pin lokasi kejadian pada peta interaktif." },
               { icon: "✅", title: "Pantau Progres", desc: "Ikuti status penanganan hingga selesai secara transparan." },
             ].map((step) => (
-              <div key={step.title} className="rounded-[28px] border border-border bg-card p-6 text-center">
+              <div key={step.title} className="rounded-[5px] border border-border bg-card p-6 text-center">
                 <div className="text-3xl">{step.icon}</div>
                 <h3 className="mt-3 font-semibold">{step.title}</h3>
                 <p className="mt-1 text-sm text-muted">{step.desc}</p>

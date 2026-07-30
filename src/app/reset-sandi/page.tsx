@@ -80,7 +80,7 @@ export default function ResetPasswordPage() {
         </p>
         <Link
           href="/lupa-sandi"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-hover"
+          className="rounded-[5px] bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-hover"
         >
           Minta Tautan Baru
         </Link>
@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
             placeholder="Minimal 6 karakter"
           />
         </label>
@@ -112,14 +112,14 @@ export default function ResetPasswordPage() {
             required
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="rounded-lg border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
+            className="rounded-[5px] border border-border bg-transparent px-3 py-2 outline-none focus:border-primary"
           />
         </label>
 
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 rounded-lg bg-primary px-4 py-2 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
+          className="mt-2 rounded-[5px] bg-primary px-4 py-2 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
         >
           {submitting ? "Menyimpan..." : "Simpan Kata Sandi"}
         </button>

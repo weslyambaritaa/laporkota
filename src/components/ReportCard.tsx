@@ -14,17 +14,17 @@ export function ReportCard({
   showReporter?: boolean;
 }) {
   return (
-    <div className="flex gap-3 rounded-lg border border-border bg-card p-3">
+    <div className="flex gap-3 rounded-[5px] border border-border bg-card p-3">
       {report.photo_url ? (
         <Image
           src={report.photo_url}
           alt={report.title}
           width={96}
           height={96}
-          className="h-24 w-24 shrink-0 rounded-lg object-cover"
+          className="h-24 w-24 shrink-0 rounded-[5px] object-cover"
         />
       ) : (
-        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg bg-black/5 text-2xl dark:bg-white/10">
+        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[5px] bg-black/5 text-2xl dark:bg-white/10">
           🏙️
         </div>
       )}

@@ -93,6 +93,7 @@ create table if not exists public.reports (
   title text not null check (char_length(title) between 1 and 200),
   description text not null check (char_length(description) between 1 and 3000),
   photo_url text,
+  after_photo_url text,
   lat double precision not null check (lat between -90 and 90),
   lng double precision not null check (lng between -180 and 180),
   address text check (address is null or char_length(address) <= 500),
@@ -107,6 +108,10 @@ create table if not exists public.reports (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Idempotent for databases that ran an earlier version of this schema
+-- before after_photo_url existed.
+alter table public.reports add column if not exists after_photo_url text;
 
 create index if not exists reports_status_idx on public.reports (status);
 create index if not exists reports_category_idx on public.reports (category);

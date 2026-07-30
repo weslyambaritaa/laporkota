@@ -25,6 +25,7 @@ export type Report = {
   title: string;
   description: string;
   photo_url: string | null;
+  after_photo_url: string | null;
   lat: number;
   lng: number;
   address: string | null;

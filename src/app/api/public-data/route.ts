@@ -32,7 +32,7 @@ export async function GET(request: Request) {
   const { data: reports, error } = await supabase
     .from("reports")
     .select(
-      "id,title,description,category,urgency,status,lat,lng,address,upvote_count,created_at,updated_at",
+      "id,title,description,category,urgency,status,lat,lng,address,upvote_count,after_photo_url,created_at,updated_at",
     )
     .order("created_at", { ascending: false });
 
@@ -65,6 +65,7 @@ export async function GET(request: Request) {
             status: r.status,
             address: r.address,
             upvoteCount: r.upvote_count,
+            afterPhotoUrl: r.after_photo_url,
             createdAt: r.created_at,
             updatedAt: r.updated_at,
           },
@@ -89,6 +90,7 @@ export async function GET(request: Request) {
         lng: r.lng,
         address: r.address,
         upvoteCount: r.upvote_count,
+        afterPhotoUrl: r.after_photo_url,
         createdAt: r.created_at,
         updatedAt: r.updated_at,
       })),

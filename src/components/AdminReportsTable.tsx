@@ -15,6 +15,7 @@ import { formatDate } from "@/lib/utils";
 import { ExportButtons } from "./ExportButtons";
 import { StatsCharts } from "./StatsCharts";
 import { computePriorityScore, rankByPriority } from "@/lib/priority";
+import { AfterPhotoUpload } from "./AfterPhotoUpload";
 
 export function AdminReportsTable({ initialReports }: { initialReports: Report[] }) {
   const [reports, setReports] = useState(initialReports);
@@ -206,6 +207,17 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                               </p>
                             )}
                           </div>
+                          <AfterPhotoUpload
+                            reportId={report.id}
+                            currentUrl={report.after_photo_url}
+                            onUploaded={(url) =>
+                              setReports((prev) =>
+                                prev.map((r) =>
+                                  r.id === report.id ? { ...r, after_photo_url: url } : r,
+                                ),
+                              )
+                            }
+                          />
                         </div>
                       </td>
                     </tr>

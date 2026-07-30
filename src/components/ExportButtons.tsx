@@ -42,7 +42,7 @@ export function ExportButtons({ reports }: { reports: Report[] }) {
       head: [Object.keys(rows[0] ?? {})],
       body: rows.map((r) => Object.values(r)),
       styles: { fontSize: 7 },
-      headStyles: { fillColor: [249, 115, 22] },
+      headStyles: { fillColor: [0, 113, 227] },
     });
     doc.save(`laporkota-laporan-${Date.now()}.pdf`);
   }

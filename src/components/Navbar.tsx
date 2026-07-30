@@ -11,6 +11,7 @@ import { NotificationBell } from "./NotificationBell";
 export function Navbar() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [logoError, setLogoError] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -75,9 +76,19 @@ export function Navbar() {
     <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-[44px] max-w-6xl items-center justify-between gap-4 px-5">
         <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold">
-          <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-primary text-sm font-bold text-white">
-            L
-          </span>
+          {logoError ? (
+            <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-primary text-sm font-bold text-white">
+              L
+            </span>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="/logo.png"
+              alt="LaporKota"
+              className="h-7 w-7 rounded-[5px] object-cover"
+              onError={() => setLogoError(true)}
+            />
+          )}
           <span>LaporKota</span>
         </Link>
 

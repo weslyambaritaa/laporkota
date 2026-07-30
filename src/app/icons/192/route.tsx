@@ -1,8 +1,12 @@
 import { ImageResponse } from "next/og";
+import { getLogoDataUri } from "@/lib/appIcon";
 
 export const dynamic = "force-static";
 
 export async function GET() {
+  const logo = getLogoDataUri();
+  const size = 192;
+
   return new ImageResponse(
     (
       <div
@@ -18,9 +22,14 @@ export async function GET() {
           color: "#ffffff",
         }}
       >
-        L
+        {logo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logo} width={size} height={size} alt="" />
+        ) : (
+          "L"
+        )}
       </div>
     ),
-    { width: 192, height: 192 },
+    { width: size, height: size },
   );
 }

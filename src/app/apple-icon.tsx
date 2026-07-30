@@ -1,9 +1,12 @@
 import { ImageResponse } from "next/og";
+import { getLogoDataUri } from "@/lib/appIcon";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 export default function AppleIcon() {
+  const logo = getLogoDataUri();
+
   return new ImageResponse(
     (
       <div
@@ -19,7 +22,12 @@ export default function AppleIcon() {
           color: "#ffffff",
         }}
       >
-        L
+        {logo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logo} width={size.width} height={size.height} alt="" />
+        ) : (
+          "L"
+        )}
       </div>
     ),
     size,

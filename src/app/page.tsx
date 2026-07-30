@@ -45,13 +45,13 @@ export default async function HomePage() {
             href="/laporan/baru"
             className="rounded-[5px] bg-primary px-6 py-3 font-semibold text-white transition hover:bg-primary-hover"
           >
-            📢 Buat Laporan
+            Buat Laporan
           </Link>
           <Link
             href="/peta"
             className="rounded-[5px] border border-border px-6 py-3 font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
           >
-            🗺️ Lihat Peta Laporan
+            Lihat Peta Laporan
           </Link>
         </div>
 
@@ -72,14 +72,13 @@ export default async function HomePage() {
           <h2 className="text-center text-2xl font-bold">Bagaimana Cara Kerjanya?</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-4">
             {[
-              { icon: "📸", title: "Foto & Deskripsikan", desc: "Ambil foto masalah dan jelaskan kondisinya." },
-              { icon: "🤖", title: "AI Mengklasifikasi", desc: "Gemini AI menentukan kategori & urgensi otomatis." },
-              { icon: "📍", title: "Tandai Lokasi", desc: "Pin lokasi kejadian pada peta interaktif." },
-              { icon: "✅", title: "Pantau Progres", desc: "Ikuti status penanganan hingga selesai secara transparan." },
+              { title: "Foto & Deskripsikan", desc: "Ambil foto masalah dan jelaskan kondisinya." },
+              { title: "AI Mengklasifikasi", desc: "Gemini AI menentukan kategori & urgensi otomatis." },
+              { title: "Tandai Lokasi", desc: "Pin lokasi kejadian pada peta interaktif." },
+              { title: "Pantau Progres", desc: "Ikuti status penanganan hingga selesai secara transparan." },
             ].map((step) => (
               <div key={step.title} className="rounded-[5px] border border-border bg-card p-6 text-center">
-                <div className="text-3xl">{step.icon}</div>
-                <h3 className="mt-3 font-semibold">{step.title}</h3>
+                <h3 className="font-semibold">{step.title}</h3>
                 <p className="mt-1 text-sm text-muted">{step.desc}</p>
               </div>
             ))}

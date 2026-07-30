@@ -12,11 +12,13 @@ export async function GET() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#f97316",
+          background: "#0071e3",
           fontSize: 300,
+          fontWeight: 700,
+          color: "#ffffff",
         }}
       >
-        🏙️
+        L
       </div>
     ),
     { width: 512, height: 512 },

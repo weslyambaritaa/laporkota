@@ -75,8 +75,8 @@ export function Navbar() {
     <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-[44px] max-w-6xl items-center justify-between gap-4 px-5">
         <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold">
-          <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-primary text-white">
-            🏙️
+          <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-primary text-sm font-bold text-white">
+            L
           </span>
           <span>LaporKota</span>
         </Link>

@@ -163,14 +163,14 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                           <div className="flex-1 space-y-2 text-sm">
                             <p>{report.description}</p>
                             {report.address && (
-                              <p className="text-muted">📍 {report.address}</p>
+                              <p className="text-muted">{report.address}</p>
                             )}
                             <p className="text-xs text-muted">
                               Koordinat: {report.lat.toFixed(5)}, {report.lng.toFixed(5)}
                             </p>
                             {report.ai_reasoning && (
                               <p className="rounded-[5px] bg-primary/10 p-2 text-xs italic text-primary dark:text-primary-light">
-                                💡 Klasifikasi AI: {report.ai_reasoning}
+                                Klasifikasi AI: {report.ai_reasoning}
                               </p>
                             )}
                           </div>

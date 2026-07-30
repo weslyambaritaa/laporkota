@@ -303,7 +303,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
             disabled={locating}
             className="rounded-[5px] border border-border px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/10"
           >
-            {locating ? "Mengambil lokasi..." : "📍 Gunakan Lokasi Saya"}
+            {locating ? "Mengambil lokasi..." : "Gunakan Lokasi Saya"}
           </button>
         </div>
         <LocationPicker lat={lat} lng={lng} onChange={handleLocationChange} />
@@ -322,7 +322,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
       <div className="rounded-[5px] border border-dashed border-primary p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-semibold">✨ Klasifikasi Otomatis dengan AI</p>
+            <p className="text-sm font-semibold">Klasifikasi Otomatis dengan AI</p>
             <p className="text-xs text-muted">
               Gemini akan menentukan kategori & urgensi berdasarkan judul, deskripsi, dan foto.
             </p>
@@ -338,7 +338,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
         </div>
         {aiReasoning && (
           <p className="mt-3 rounded-[5px] bg-primary/10 p-2 text-xs italic text-primary dark:text-primary-light">
-            💡 {aiReasoning}
+            {aiReasoning}
           </p>
         )}
       </div>

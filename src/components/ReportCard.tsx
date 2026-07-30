@@ -24,8 +24,19 @@ export function ReportCard({
           className="h-24 w-24 shrink-0 rounded-[5px] object-cover"
         />
       ) : (
-        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[5px] bg-black/5 text-2xl dark:bg-white/10">
-          🏙️
+        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[5px] bg-black/5 text-muted dark:bg-white/10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            className="h-8 w-8"
+          >
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <circle cx="8.5" cy="9.5" r="1.5" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="m3 16 5-5 4 4 3-3 6 6" />
+          </svg>
         </div>
       )}
 

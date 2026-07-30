@@ -11,7 +11,7 @@ import type { ReportCategory, ReportStatus, ReportUrgency } from "@/lib/types";
 function Badge({ color, label }: { color: string; label: string }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+      className="inline-flex items-center gap-1.5 rounded-[5px] px-2.5 py-1 text-xs font-semibold"
       style={{ backgroundColor: `${color}22`, color }}
     >
       <span

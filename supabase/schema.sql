@@ -285,3 +285,14 @@ begin
     alter publication supabase_realtime add table public.reports;
   end if;
 end $$;
+
+-- With the default REPLICA IDENTITY, Postgres only includes primary-key
+-- columns in the "old" row of an UPDATE's logical-replication payload — so
+-- Supabase Realtime's `payload.old` arrives with every other column
+-- (including status) as undefined. NotificationBell.tsx compares
+-- payload.old.status to payload.new.status to decide whether to notify;
+-- with old.status always undefined, that comparison never matches and it
+-- fires a false "status changed" toast on ANY update to the row (e.g. an
+-- upvote incrementing upvote_count). FULL replica identity sends the
+-- complete old row so the comparison reflects reality.
+alter table public.reports replica identity full;

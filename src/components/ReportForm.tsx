@@ -61,6 +61,11 @@ export function ReportForm({ report }: { report?: Report } = {}) {
   const [locating, setLocating] = useState(false);
   const [classifying, setClassifying] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [checkingDuplicate, setCheckingDuplicate] = useState(false);
+  const [duplicateMatch, setDuplicateMatch] = useState<{ id: string; title: string } | null>(
+    null,
+  );
+  const [duplicateReason, setDuplicateReason] = useState("");
 
   async function reverseGeocode(newLat: number, newLng: number) {
     try {
@@ -165,13 +170,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!title.trim() || !description.trim()) {
-      toast.error("Judul dan deskripsi wajib diisi.");
-      return;
-    }
-
+  async function submitReport() {
     setSubmitting(true);
     const supabase = createClient();
 
@@ -236,6 +235,119 @@ export function ReportForm({ report }: { report?: Report } = {}) {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!title.trim() || !description.trim()) {
+      toast.error("Judul dan deskripsi wajib diisi.");
+      return;
+    }
+
+    // Duplicate detection only matters for brand-new reports at a location —
+    // editing an existing one can't be "a duplicate of itself".
+    if (!isEdit) {
+      setCheckingDuplicate(true);
+      try {
+        const res = await fetch("/api/check-duplicate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, description, lat, lng, category }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.duplicate) {
+            setDuplicateMatch(data.duplicate);
+            setDuplicateReason(data.reason ?? "");
+            setCheckingDuplicate(false);
+            return;
+          }
+        }
+      } catch {
+        // Fail open — a hiccup in the convenience check shouldn't block submission.
+      }
+      setCheckingDuplicate(false);
+    }
+
+    await submitReport();
+  }
+
+  async function handleMergeIntoExisting() {
+    if (!duplicateMatch) return;
+    setSubmitting(true);
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      toast.error("Sesi Anda telah berakhir, silakan masuk kembali.");
+      setSubmitting(false);
+      return;
+    }
+
+    const { error } = await supabase
+      .from("report_upvotes")
+      .insert({ report_id: duplicateMatch.id, user_id: user.id });
+    setSubmitting(false);
+
+    // 23505 = unique_violation: user already supported this report, which
+    // for our purposes here is just as good as a fresh success.
+    if (error && error.code !== "23505") {
+      toast.error("Gagal memberi dukungan: " + error.message);
+      return;
+    }
+
+    toast.success(`Dukungan ditambahkan ke laporan "${duplicateMatch.title}".`);
+    router.push("/peta");
+  }
+
+  function handleSubmitAnyway() {
+    setDuplicateMatch(null);
+    void submitReport();
+  }
+
+  if (duplicateMatch) {
+    return (
+      <div className="mx-auto flex max-w-2xl flex-col gap-4 px-4 py-8">
+        <div className="rounded-[5px] border border-primary bg-primary/10 p-5">
+          <h2 className="text-lg font-semibold">Laporan Serupa Ditemukan</h2>
+          <p className="mt-2 text-sm">
+            AI mendeteksi laporan &quot;<strong>{duplicateMatch.title}</strong>&quot; kemungkinan
+            menggambarkan masalah yang sama di lokasi ini.
+          </p>
+          {duplicateReason && (
+            <p className="mt-1 text-xs italic text-muted">{duplicateReason}</p>
+          )}
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={handleMergeIntoExisting}
+              disabled={submitting}
+              className="rounded-[5px] bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
+            >
+              {submitting ? "Memproses..." : "Gabung Dukungan ke Laporan Itu"}
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmitAnyway}
+              disabled={submitting}
+              className="rounded-[5px] border border-border px-4 py-2 text-sm font-semibold transition hover:bg-black/5 disabled:opacity-60 dark:hover:bg-white/10"
+            >
+              {submitting ? "Mengirim..." : "Tetap Kirim Sebagai Laporan Baru"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setDuplicateMatch(null)}
+              disabled={submitting}
+              className="rounded-[5px] px-4 py-2 text-sm font-medium text-muted hover:underline disabled:opacity-60"
+            >
+              Batal, Kembali Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -377,16 +489,18 @@ export function ReportForm({ report }: { report?: Report } = {}) {
 
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || checkingDuplicate}
         className="mt-2 rounded-[5px] bg-primary px-4 py-3 font-semibold text-white transition hover:bg-primary-hover disabled:opacity-60"
       >
-        {submitting
-          ? isEdit
-            ? "Menyimpan..."
-            : "Mengirim..."
-          : isEdit
-            ? "Simpan Perubahan"
-            : "Kirim Laporan"}
+        {checkingDuplicate
+          ? "Mengecek laporan serupa..."
+          : submitting
+            ? isEdit
+              ? "Menyimpan..."
+              : "Mengirim..."
+            : isEdit
+              ? "Simpan Perubahan"
+              : "Kirim Laporan"}
       </button>
     </form>
   );

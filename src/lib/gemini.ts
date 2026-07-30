@@ -1,5 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
-import type { ClassifyResult, ReportCategory, ReportUrgency } from "./types";
+import type {
+  ClassifyResult,
+  DuplicateCandidate,
+  DuplicateCheckResult,
+  ReportCategory,
+  ReportUrgency,
+} from "./types";
 
 const MODEL = "gemini-2.5-flash";
 
@@ -80,5 +86,68 @@ export async function classifyReport(params: {
     category,
     urgency,
     reasoning: parsed.reasoning?.toString().slice(0, 500) ?? "",
+  };
+}
+
+const DUPLICATE_PROMPT = `Kamu membantu mendeteksi apakah laporan warga baru menggambarkan masalah nyata yang SAMA dengan salah satu laporan yang sudah ada di lokasi berdekatan (bukan sekadar kategori sama — harus benar-benar terlihat seperti kejadian/masalah fisik yang identik).
+
+Balas HANYA dengan JSON valid tanpa markdown, format:
+{"duplicateId": "<id laporan yang sama, atau null kalau tidak ada>", "reason": "<alasan singkat, Bahasa Indonesia, maksimal 1 kalimat>"}`;
+
+export async function checkDuplicate(params: {
+  title: string;
+  description: string;
+  candidates: DuplicateCandidate[];
+}): Promise<DuplicateCheckResult> {
+  if (params.candidates.length === 0) {
+    return { duplicateId: null, reason: "" };
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY belum diatur di environment variables");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const candidateList = params.candidates
+    .map(
+      (c) =>
+        `- id: ${c.id} | jarak: ~${Math.round(c.distanceMeters)}m | judul: ${c.title} | deskripsi: ${c.description}`,
+    )
+    .join("\n");
+
+  const prompt = `${DUPLICATE_PROMPT}
+
+Laporan baru:
+judul: ${params.title}
+deskripsi: ${params.description}
+
+Laporan yang sudah ada di sekitar lokasi ini:
+${candidateList}`;
+
+  const result = await ai.models.generateContent({
+    model: MODEL,
+    contents: [{ role: "user", parts: [{ text: prompt }] }],
+  });
+  const text = (result.text ?? "").trim();
+  const jsonText = text.replace(/^```json\s*|\s*```$/g, "").trim();
+
+  let parsed: Partial<DuplicateCheckResult>;
+  try {
+    parsed = JSON.parse(jsonText);
+  } catch {
+    return { duplicateId: null, reason: "" };
+  }
+
+  const duplicateId =
+    typeof parsed.duplicateId === "string" &&
+    params.candidates.some((c) => c.id === parsed.duplicateId)
+      ? parsed.duplicateId
+      : null;
+
+  return {
+    duplicateId,
+    reason: parsed.reason?.toString().slice(0, 300) ?? "",
   };
 }

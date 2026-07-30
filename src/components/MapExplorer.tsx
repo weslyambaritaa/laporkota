@@ -24,6 +24,7 @@ export function MapExplorer({
 }) {
   const [category, setCategory] = useState<ReportCategory | "semua">("semua");
   const [status, setStatus] = useState<ReportStatus | "semua">("semua");
+  const [showHeatmap, setShowHeatmap] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -72,6 +73,15 @@ export function MapExplorer({
           </select>
         </div>
 
+        <label className="flex items-center gap-2 text-xs font-medium">
+          <input
+            type="checkbox"
+            checked={showHeatmap}
+            onChange={(e) => setShowHeatmap(e.target.checked)}
+          />
+          Tampilkan Peta Panas Prioritas
+        </label>
+
         <div className="flex-1 space-y-3 overflow-y-auto pr-1">
           {filtered.length === 0 ? (
             <p className="py-8 text-center text-sm text-muted">
@@ -91,7 +101,7 @@ export function MapExplorer({
       </div>
 
       <div className="min-h-[300px] flex-1 overflow-hidden rounded-[5px] border border-border">
-        <ReportMap reports={filtered} />
+        <ReportMap reports={filtered} showHeatmap={showHeatmap} />
       </div>
     </div>
   );

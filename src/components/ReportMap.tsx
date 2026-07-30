@@ -5,10 +5,17 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import type { Report } from "@/lib/types";
 import { CATEGORY_COLORS, CATEGORY_LABELS, STATUS_LABELS, URGENCY_LABELS } from "@/lib/constants";
 import { coloredDivIcon, ensureLeafletDefaultIcon } from "@/lib/leafletIcons";
+import { HeatmapLayer } from "./HeatmapLayer";
 
 const DEFAULT_CENTER: [number, number] = [-6.3705, 106.8272];
 
-export default function ReportMap({ reports }: { reports: Report[] }) {
+export default function ReportMap({
+  reports,
+  showHeatmap = false,
+}: {
+  reports: Report[];
+  showHeatmap?: boolean;
+}) {
   useEffect(() => {
     ensureLeafletDefaultIcon();
   }, []);
@@ -22,6 +29,7 @@ export default function ReportMap({ reports }: { reports: Report[] }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      {showHeatmap && <HeatmapLayer reports={reports} />}
       {reports.map((report) => (
         <Marker
           key={report.id}

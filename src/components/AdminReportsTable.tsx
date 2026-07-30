@@ -14,6 +14,7 @@ import { CategoryBadge, UrgencyBadge } from "./Badges";
 import { formatDate } from "@/lib/utils";
 import { ExportButtons } from "./ExportButtons";
 import { StatsCharts } from "./StatsCharts";
+import { computePriorityScore, rankByPriority } from "@/lib/priority";
 
 export function AdminReportsTable({ initialReports }: { initialReports: Report[] }) {
   const [reports, setReports] = useState(initialReports);
@@ -22,6 +23,8 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
   const [status, setStatus] = useState<ReportStatus | "semua">("semua");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const topPriority = useMemo(() => rankByPriority(reports).slice(0, 5), [reports]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -60,6 +63,35 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
   return (
     <div className="flex flex-col gap-6">
       <StatsCharts reports={reports} />
+
+      {topPriority.length > 0 && (
+        <div className="rounded-[5px] border border-border bg-card p-4">
+          <h3 className="mb-1 text-sm font-semibold">Top 5 Prioritas Penanganan</h3>
+          <p className="mb-3 text-xs text-muted">
+            Diurutkan otomatis dari urgensi, jumlah dukungan warga, dan lama laporan belum ditangani.
+          </p>
+          <div className="space-y-2">
+            {topPriority.map((report, i) => (
+              <button
+                key={report.id}
+                type="button"
+                onClick={() => setExpandedId(report.id)}
+                className="flex w-full items-center justify-between gap-3 rounded-[5px] border border-border px-3 py-2 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5"
+              >
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[5px] bg-primary text-xs font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <span className="truncate font-medium">{report.title}</span>
+                </span>
+                <span className="shrink-0 text-xs text-muted">
+                  Skor {computePriorityScore(report).toFixed(1)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="rounded-[5px] border border-border bg-card">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">

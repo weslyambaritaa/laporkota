@@ -52,3 +52,15 @@ export type ClassifyResult = {
   urgency: ReportUrgency;
   reasoning: string;
 };
+
+export type DuplicateCandidate = {
+  id: string;
+  title: string;
+  description: string;
+  distanceMeters: number;
+};
+
+export type DuplicateCheckResult = {
+  duplicateId: string | null;
+  reason: string;
+};

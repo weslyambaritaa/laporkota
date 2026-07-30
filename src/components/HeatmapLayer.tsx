@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Circle } from "react-leaflet";
 import type { Report } from "@/lib/types";
 import { computePriorityScore, isActionable } from "@/lib/priority";
@@ -13,7 +14,10 @@ function heatColor(normalized: number) {
 }
 
 export function HeatmapLayer({ reports }: { reports: Report[] }) {
-  const now = Date.now();
+  // Date.now() is impure — calling it directly in the render body is
+  // disallowed by the React Compiler's purity rules. A lazy useState
+  // initializer is the sanctioned place for a one-time impure read.
+  const [now] = useState(() => Date.now());
 
   return (
     <>

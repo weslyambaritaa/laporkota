@@ -64,3 +64,10 @@ export type DuplicateCheckResult = {
   duplicateId: string | null;
   reason: string;
 };
+
+export type ReportResolutionConfirmation = {
+  report_id: string;
+  user_id: string;
+  confirmed: boolean;
+  created_at: string;
+};

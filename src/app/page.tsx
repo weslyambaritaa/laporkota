@@ -65,6 +65,20 @@ export default async function HomePage() {
             <p className="text-sm text-muted">Selesai Ditangani</p>
           </div>
         </div>
+
+        <p className="mt-6 text-xs text-muted">
+          Data laporan terbuka untuk umum —{" "}
+          <a href="/api/public-data" className="font-medium text-primary hover:underline">
+            JSON
+          </a>{" "}
+          ·{" "}
+          <a
+            href="/api/public-data?format=geojson"
+            className="font-medium text-primary hover:underline"
+          >
+            GeoJSON
+          </a>
+        </p>
       </section>
 
       <section className="border-t border-border bg-black/2 py-16 dark:bg-white/2">

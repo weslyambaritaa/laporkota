@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Report } from "@/lib/types";
 import { CategoryBadge, StatusBadge, UrgencyBadge } from "./Badges";
 import { UpvoteButton } from "./UpvoteButton";
+import { ResolutionVerification } from "./ResolutionVerification";
 import { timeAgo } from "@/lib/utils";
 
 export function ReportCard({
@@ -59,6 +60,9 @@ export function ReportCard({
             userId={currentUserId}
           />
         </div>
+        {report.status === "selesai" && (
+          <ResolutionVerification reportId={report.id} userId={currentUserId} />
+        )}
       </div>
     </div>
   );

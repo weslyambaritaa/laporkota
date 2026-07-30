@@ -296,3 +296,73 @@ end $$;
 -- upvote incrementing upvote_count). FULL replica identity sends the
 -- complete old row so the comparison reflects reality.
 alter table public.reports replica identity full;
+
+-- ============================================================
+-- 7. RESOLUTION VERIFICATION (community QA on "selesai" reports)
+-- ============================================================
+-- Without this, an admin could mark any report "selesai" unilaterally with
+-- no independent check that the problem was actually fixed. Citizens near
+-- a resolved report can confirm or dispute it; enough disputes reopen it.
+create table if not exists public.report_resolution_confirmations (
+  report_id uuid not null references public.reports (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  confirmed boolean not null,
+  created_at timestamptz not null default now(),
+  primary key (report_id, user_id)
+);
+
+alter table public.report_resolution_confirmations enable row level security;
+
+drop policy if exists "resolution_select_all" on public.report_resolution_confirmations;
+create policy "resolution_select_all" on public.report_resolution_confirmations
+  for select using (true);
+
+-- Can only vote on reports that are actually marked "selesai" — voting on
+-- an in-progress report wouldn't mean anything.
+drop policy if exists "resolution_insert_own" on public.report_resolution_confirmations;
+create policy "resolution_insert_own" on public.report_resolution_confirmations
+  for insert with check (
+    auth.uid() = user_id
+    and exists (
+      select 1 from public.reports r where r.id = report_id and r.status = 'selesai'
+    )
+  );
+
+drop policy if exists "resolution_update_own" on public.report_resolution_confirmations;
+create policy "resolution_update_own" on public.report_resolution_confirmations
+  for update using (auth.uid() = user_id);
+
+drop policy if exists "resolution_delete_own" on public.report_resolution_confirmations;
+create policy "resolution_delete_own" on public.report_resolution_confirmations
+  for delete using (auth.uid() = user_id);
+
+-- Auto-reopen: once 2 or more citizens dispute a "selesai" report, flip it
+-- back to 'diproses' so an admin has to re-examine it. Threshold of 2
+-- keeps a single bad-faith dispute from reopening a genuinely fixed report.
+create or replace function public.reopen_disputed_reports()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  dispute_count integer;
+  target_report_id uuid := coalesce(new.report_id, old.report_id);
+begin
+  select count(*) into dispute_count
+  from public.report_resolution_confirmations
+  where report_id = target_report_id and confirmed = false;
+
+  if dispute_count >= 2 then
+    update public.reports
+    set status = 'diproses'
+    where id = target_report_id and status = 'selesai';
+  end if;
+
+  return coalesce(new, old);
+end;
+$$;
+
+drop trigger if exists resolution_reopen_on_change on public.report_resolution_confirmations;
+create trigger resolution_reopen_on_change
+  after insert or update on public.report_resolution_confirmations
+  for each row execute procedure public.reopen_disputed_reports();

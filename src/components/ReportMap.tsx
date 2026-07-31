@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import type { Marker as LeafletMarker } from "leaflet";
 import type { Report } from "@/lib/types";
 import { CATEGORY_COLORS, CATEGORY_LABELS, STATUS_LABELS, URGENCY_LABELS } from "@/lib/constants";
 import { coloredDivIcon, ensureLeafletDefaultIcon } from "@/lib/leafletIcons";
@@ -9,15 +10,42 @@ import { HeatmapLayer } from "./HeatmapLayer";
 
 const DEFAULT_CENTER: [number, number] = [-6.3705, 106.8272];
 
+function FlyToSelected({
+  reports,
+  selectedId,
+  markerRefs,
+}: {
+  reports: Report[];
+  selectedId?: string | null;
+  markerRefs: React.RefObject<Map<string, LeafletMarker>>;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!selectedId) return;
+    const target = reports.find((r) => r.id === selectedId);
+    if (!target) return;
+    map.flyTo([target.lat, target.lng], Math.max(map.getZoom(), 16), { duration: 0.75 });
+    markerRefs.current.get(selectedId)?.openPopup();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  return null;
+}
+
 export default function ReportMap({
   reports,
   showHeatmap = false,
   chronicIds,
+  selectedReportId,
 }: {
   reports: Report[];
   showHeatmap?: boolean;
   chronicIds?: Set<string>;
+  selectedReportId?: string | null;
 }) {
+  const markerRefs = useRef(new Map<string, LeafletMarker>());
+
   useEffect(() => {
     ensureLeafletDefaultIcon();
   }, []);
@@ -32,9 +60,14 @@ export default function ReportMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {showHeatmap && <HeatmapLayer reports={reports} />}
+      <FlyToSelected reports={reports} selectedId={selectedReportId} markerRefs={markerRefs} />
       {reports.map((report) => (
         <Marker
           key={report.id}
+          ref={(instance) => {
+            if (instance) markerRefs.current.set(report.id, instance);
+            else markerRefs.current.delete(report.id);
+          }}
           position={[report.lat, report.lng]}
           icon={coloredDivIcon(CATEGORY_COLORS[report.category], {
             chronic: chronicIds?.has(report.id),

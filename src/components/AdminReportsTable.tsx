@@ -54,6 +54,13 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
   }, [reports, search, category, status]);
 
   async function handleStatusChange(reportId: string, newStatus: ReportStatus) {
+    const report = reports.find((r) => r.id === reportId);
+    if (newStatus === "selesai" && !report?.after_photo_url) {
+      toast.error("Upload foto bukti perbaikan terlebih dahulu sebelum menandai Selesai.");
+      setExpandedId(reportId);
+      return;
+    }
+
     setUpdatingId(reportId);
     const supabase = createClient();
     const { error } = await supabase
@@ -250,17 +257,24 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                               </p>
                             )}
                           </div>
-                          <AfterPhotoUpload
-                            reportId={report.id}
-                            currentUrl={report.after_photo_url}
-                            onUploaded={(url) =>
-                              setReports((prev) =>
-                                prev.map((r) =>
-                                  r.id === report.id ? { ...r, after_photo_url: url } : r,
-                                ),
-                              )
-                            }
-                          />
+                          <div>
+                            <AfterPhotoUpload
+                              reportId={report.id}
+                              currentUrl={report.after_photo_url}
+                              onUploaded={(url) =>
+                                setReports((prev) =>
+                                  prev.map((r) =>
+                                    r.id === report.id ? { ...r, after_photo_url: url } : r,
+                                  ),
+                                )
+                              }
+                            />
+                            {!report.after_photo_url && (
+                              <p className="mt-1 max-w-32 text-[11px] text-red-600 dark:text-red-400">
+                                Wajib diisi sebelum status bisa diubah ke Selesai.
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </td>
                     </tr>

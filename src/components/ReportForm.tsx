@@ -59,6 +59,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
     report?.ai_reasoning ?? null,
   );
   const [locating, setLocating] = useState(false);
+  const [flyTrigger, setFlyTrigger] = useState(0);
   const [classifying, setClassifying] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(false);
@@ -96,6 +97,7 @@ export function ReportForm({ report }: { report?: Report } = {}) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         handleLocationChange(position.coords.latitude, position.coords.longitude);
+        setFlyTrigger((t) => t + 1);
         setLocating(false);
         toast.success("Lokasi berhasil diambil.");
       },
@@ -418,7 +420,12 @@ export function ReportForm({ report }: { report?: Report } = {}) {
             {locating ? "Mengambil lokasi..." : "Gunakan Lokasi Saya"}
           </button>
         </div>
-        <LocationPicker lat={lat} lng={lng} onChange={handleLocationChange} />
+        <LocationPicker
+          lat={lat}
+          lng={lng}
+          onChange={handleLocationChange}
+          flyTrigger={flyTrigger}
+        />
         <p className="text-xs text-muted">
           Klik peta atau geser pin untuk menyesuaikan titik lokasi. Koordinat:{" "}
           {lat.toFixed(5)}, {lng.toFixed(5)}

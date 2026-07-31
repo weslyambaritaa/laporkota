@@ -26,6 +26,7 @@ export function MapExplorer({
   const [category, setCategory] = useState<ReportCategory | "semua">("semua");
   const [status, setStatus] = useState<ReportStatus | "semua">("semua");
   const [showHeatmap, setShowHeatmap] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [now] = useState(() => Date.now());
 
   const filtered = useMemo(
@@ -105,13 +106,20 @@ export function MapExplorer({
             </p>
           ) : (
             filtered.map((report) => (
-              <ReportCard
+              <div
                 key={report.id}
-                report={report}
-                currentUserId={currentUserId}
-                showReporter
-                chronicCount={chronicCounts.get(report.id) ?? 0}
-              />
+                onClick={() => setSelectedId(report.id)}
+                className={`cursor-pointer rounded-[5px] transition ${
+                  selectedId === report.id ? "ring-2 ring-primary" : ""
+                }`}
+              >
+                <ReportCard
+                  report={report}
+                  currentUserId={currentUserId}
+                  showReporter
+                  chronicCount={chronicCounts.get(report.id) ?? 0}
+                />
+              </div>
             ))
           )}
         </div>
@@ -122,6 +130,7 @@ export function MapExplorer({
           reports={filtered}
           showHeatmap={showHeatmap}
           chronicIds={chronicIds}
+          selectedReportId={selectedId}
         />
       </div>
     </div>

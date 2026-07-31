@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import type { Report, ReportCategory, ReportStatus } from "@/lib/types";
 import { CATEGORY_OPTIONS, STATUS_OPTIONS } from "@/lib/constants";
 import { ReportCard } from "./ReportCard";
+import { CHRONIC_THRESHOLD, getChronicCount } from "@/lib/chronic";
 
 const ReportMap = dynamic(() => import("./ReportMap"), {
   ssr: false,
@@ -25,6 +26,7 @@ export function MapExplorer({
   const [category, setCategory] = useState<ReportCategory | "semua">("semua");
   const [status, setStatus] = useState<ReportStatus | "semua">("semua");
   const [showHeatmap, setShowHeatmap] = useState(false);
+  const [now] = useState(() => Date.now());
 
   const filtered = useMemo(
     () =>
@@ -35,6 +37,20 @@ export function MapExplorer({
       ),
     [reports, category, status],
   );
+
+  // Computed against the full, unfiltered report list — a spot's chronic
+  // history shouldn't disappear just because the current filter hides one
+  // of its earlier occurrences.
+  const chronicCounts = useMemo(() => {
+    const map = new Map<string, number>();
+    reports.forEach((r) => {
+      const count = getChronicCount(r, reports, now);
+      if (count >= CHRONIC_THRESHOLD) map.set(r.id, count);
+    });
+    return map;
+  }, [reports, now]);
+
+  const chronicIds = useMemo(() => new Set(chronicCounts.keys()), [chronicCounts]);
 
   return (
     <div className="mx-auto flex h-[calc(100vh-8.5rem)] max-w-6xl flex-col gap-4 px-4 py-4 md:flex-row">
@@ -94,6 +110,7 @@ export function MapExplorer({
                 report={report}
                 currentUserId={currentUserId}
                 showReporter
+                chronicCount={chronicCounts.get(report.id) ?? 0}
               />
             ))
           )}
@@ -101,7 +118,11 @@ export function MapExplorer({
       </div>
 
       <div className="min-h-[300px] flex-1 overflow-hidden rounded-[5px] border border-border">
-        <ReportMap reports={filtered} showHeatmap={showHeatmap} />
+        <ReportMap
+          reports={filtered}
+          showHeatmap={showHeatmap}
+          chronicIds={chronicIds}
+        />
       </div>
     </div>
   );

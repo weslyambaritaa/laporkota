@@ -10,12 +10,14 @@ import {
   STATUS_COLORS,
   STATUS_OPTIONS,
 } from "@/lib/constants";
-import { CategoryBadge, UrgencyBadge } from "./Badges";
+import { CategoryBadge, ChronicBadge, UrgencyBadge } from "./Badges";
 import { formatDate } from "@/lib/utils";
 import { ExportButtons } from "./ExportButtons";
 import { StatsCharts } from "./StatsCharts";
 import { computePriorityScore, rankByPriority } from "@/lib/priority";
 import { AfterPhotoUpload } from "./AfterPhotoUpload";
+import { CATEGORY_LABELS } from "@/lib/constants";
+import { findChronicClusters } from "@/lib/chronic";
 
 export function AdminReportsTable({ initialReports }: { initialReports: Report[] }) {
   const [reports, setReports] = useState(initialReports);
@@ -24,8 +26,18 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
   const [status, setStatus] = useState<ReportStatus | "semua">("semua");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [now] = useState(() => Date.now());
 
   const topPriority = useMemo(() => rankByPriority(reports).slice(0, 5), [reports]);
+
+  const chronicClusters = useMemo(() => findChronicClusters(reports, now), [reports, now]);
+  const chronicCountById = useMemo(() => {
+    const map = new Map<string, number>();
+    chronicClusters.forEach((cluster) => {
+      cluster.reports.forEach((r) => map.set(r.id, cluster.count));
+    });
+    return map;
+  }, [chronicClusters]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -87,6 +99,34 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                 </span>
                 <span className="shrink-0 text-xs text-muted">
                   Skor {computePriorityScore(report).toFixed(1)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {chronicClusters.length > 0 && (
+        <div className="rounded-[5px] border border-red-500/40 bg-red-500/5 p-4">
+          <h3 className="mb-1 text-sm font-semibold">Titik Kronis Terdeteksi</h3>
+          <p className="mb-3 text-xs text-muted">
+            Lokasi dengan laporan kategori sama yang berulang ≥3x dalam 12 bulan terakhir —
+            indikasi masalah hanya ditambal, bukan diperbaiki permanen.
+          </p>
+          <div className="space-y-2">
+            {chronicClusters.map((cluster) => (
+              <button
+                key={cluster.key}
+                type="button"
+                onClick={() => setExpandedId(cluster.reports[cluster.reports.length - 1].id)}
+                className="flex w-full items-center justify-between gap-3 rounded-[5px] border border-border px-3 py-2 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5"
+              >
+                <span className="min-w-0 truncate">
+                  {CATEGORY_LABELS[cluster.category]} —{" "}
+                  {cluster.reports.map((r) => r.title).join(", ")}
+                </span>
+                <span className="shrink-0 text-xs font-semibold text-red-600 dark:text-red-400">
+                  {cluster.count}x berulang
                 </span>
               </button>
             ))}
@@ -157,6 +197,9 @@ export function AdminReportsTable({ initialReports }: { initialReports: Report[]
                       <div className="mt-1 flex flex-wrap gap-1">
                         <CategoryBadge category={report.category} />
                         <UrgencyBadge urgency={report.urgency} />
+                        {chronicCountById.has(report.id) && (
+                          <ChronicBadge count={chronicCountById.get(report.id)!} />
+                        )}
                       </div>
                     </td>
                     <td className="px-4 py-3">{report.reporter_name ?? "-"}</td>

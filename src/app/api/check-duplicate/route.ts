@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { checkDuplicate } from "@/lib/gemini";
 import { rateLimit } from "@/lib/rateLimit";
+import { haversineMeters } from "@/lib/geo";
 
 // ~220m bounding box pre-filter (cheap DB query), narrowed to a 150m
 // radius via haversine below before anything is sent to Gemini.
@@ -31,17 +32,6 @@ function clientIp(request: Request) {
     request.headers.get("x-real-ip") ??
     "unknown"
   );
-}
-
-function haversineMeters(lat1: number, lng1: number, lat2: number, lng2: number) {
-  const R = 6_371_000;
-  const toRad = (d: number) => (d * Math.PI) / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lng2 - lng1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 export async function POST(request: Request) {

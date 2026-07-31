@@ -12,9 +12,11 @@ const DEFAULT_CENTER: [number, number] = [-6.3705, 106.8272];
 export default function ReportMap({
   reports,
   showHeatmap = false,
+  chronicIds,
 }: {
   reports: Report[];
   showHeatmap?: boolean;
+  chronicIds?: Set<string>;
 }) {
   useEffect(() => {
     ensureLeafletDefaultIcon();
@@ -34,7 +36,9 @@ export default function ReportMap({
         <Marker
           key={report.id}
           position={[report.lat, report.lng]}
-          icon={coloredDivIcon(CATEGORY_COLORS[report.category])}
+          icon={coloredDivIcon(CATEGORY_COLORS[report.category], {
+            chronic: chronicIds?.has(report.id),
+          })}
         >
           <Popup>
             <div className="max-w-[220px] text-sm">
@@ -45,6 +49,11 @@ export default function ReportMap({
               <p className="mt-1 text-xs">Status: {STATUS_LABELS[report.status]}</p>
               {report.address && (
                 <p className="mt-1 text-xs text-slate-500">{report.address}</p>
+              )}
+              {chronicIds?.has(report.id) && (
+                <p className="mt-1 text-xs font-semibold text-red-600">
+                  Titik kronis — sudah berulang kali dilaporkan di lokasi ini.
+                </p>
               )}
             </div>
           </Popup>

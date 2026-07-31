@@ -22,10 +22,13 @@ export function ensureLeafletDefaultIcon() {
   L.Marker.prototype.options.icon = DefaultIcon;
 }
 
-export function coloredDivIcon(color: string) {
+export function coloredDivIcon(color: string, options: { chronic?: boolean } = {}) {
+  const ring = options.chronic
+    ? `<span style="position:absolute;inset:-6px;border:2px dashed #dc2626;border-radius:9999px"></span>`
+    : "";
   return L.divIcon({
     className: "",
-    html: `<span style="background:${color};width:16px;height:16px;display:block;border-radius:9999px;border:2px solid white;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span>`,
+    html: `<span style="position:relative;display:block;width:16px;height:16px">${ring}<span style="background:${color};width:16px;height:16px;display:block;border-radius:9999px;border:2px solid white;box-shadow:0 0 0 1px rgba(0,0,0,0.25)"></span></span>`,
     iconSize: [16, 16],
     iconAnchor: [8, 8],
     popupAnchor: [0, -8],

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Report } from "@/lib/types";
-import { CategoryBadge, StatusBadge, UrgencyBadge } from "./Badges";
+import { CategoryBadge, ChronicBadge, StatusBadge, UrgencyBadge } from "./Badges";
 import { UpvoteButton } from "./UpvoteButton";
 import { ResolutionVerification } from "./ResolutionVerification";
 import { timeAgo } from "@/lib/utils";
@@ -9,10 +9,12 @@ export function ReportCard({
   report,
   currentUserId,
   showReporter = false,
+  chronicCount = 0,
 }: {
   report: Report;
   currentUserId: string | null;
   showReporter?: boolean;
+  chronicCount?: number;
 }) {
   return (
     <div className="flex gap-3 rounded-[5px] border border-border bg-card p-3">
@@ -86,6 +88,7 @@ export function ReportCard({
           <CategoryBadge category={report.category} />
           <UrgencyBadge urgency={report.urgency} />
           <StatusBadge status={report.status} />
+          {chronicCount > 0 && <ChronicBadge count={chronicCount} />}
         </div>
         <h3 className="truncate font-semibold">{report.title}</h3>
         <p className="line-clamp-2 text-sm text-muted">{report.description}</p>

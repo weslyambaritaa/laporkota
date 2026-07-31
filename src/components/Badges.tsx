@@ -8,7 +8,7 @@ import {
 } from "@/lib/constants";
 import type { ReportCategory, ReportStatus, ReportUrgency } from "@/lib/types";
 
-function Badge({ color, label }: { color: string; label: string }) {
+export function Badge({ color, label }: { color: string; label: string }) {
   return (
     <span
       className="inline-flex items-center gap-1.5 rounded-[5px] px-2.5 py-1 text-xs font-semibold"
@@ -33,4 +33,8 @@ export function UrgencyBadge({ urgency }: { urgency: ReportUrgency }) {
 
 export function StatusBadge({ status }: { status: ReportStatus }) {
   return <Badge color={STATUS_COLORS[status]} label={STATUS_LABELS[status]} />;
+}
+
+export function ChronicBadge({ count }: { count: number }) {
+  return <Badge color="#dc2626" label={`Titik Kronis · ${count}x`} />;
 }
